@@ -1,19 +1,39 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
 
 export default function App() {
+  const pressed = (type) => {
+    console.log(`Clicked: ${type}!`);
+    Alert.alert("You clicked", `You clicked '${type}'`);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>BrewLab</Text>
       <Text style={styles.subtitle}>Fresh coffee, fast delivery</Text>
       <View style={styles.cardsContainer}>
-        <View style={styles.cards}>
+        <Pressable
+          style={({ pressed }) => [
+            styles.cards,
+            pressed && { opacity: 0.6, transform: [{ scale: 0.97 }] },
+          ]}
+          onPress={() => pressed("Today Orders")}
+          hitSlop={44}
+        >
           <Text style={styles.cardNumber}>12</Text>
           <Text style={styles.cardText}>Today Orders</Text>
-        </View>
-        <View style={styles.cards}>
+        </Pressable>
+
+        <Pressable
+          style={({ pressed }) => [
+            styles.cards,
+            pressed && { opacity: 0.6, transform: [{ scale: 0.97 }] },
+          ]}
+          onPress={() => pressed("Revenue")}
+          hitSlop={44}
+        >
           <Text style={styles.cardNumber}>$204</Text>
           <Text style={styles.cardText}>Revenue</Text>
-        </View>
+        </Pressable>
       </View>
     </View>
   );
@@ -48,14 +68,14 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   cardNumber: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 35,
-    fontWeight: 'bold',
-    color: 'white',
+    fontWeight: "bold",
+    color: "white",
   },
   cardText: {
     color: "white",
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
