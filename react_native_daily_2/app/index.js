@@ -1,17 +1,17 @@
-import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import { useRouter } from "expo-router";
 import StatCard from "../components/StatCard";
 import { useEffect } from "react";
 import OrderItem from "../components/OrderItem";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Btn from "../components/Btn";
 
 export default function Home() {
   const router = useRouter();
 
   const fetchOrders = async () => {
-    const orders = (JSON.parse(await AsyncStorage.getItem("orders"))) || [];
+    const orders = JSON.parse(await AsyncStorage.getItem("orders")) || [];
     console.log("Orders:", JSON.stringify(orders, null, 2));
-
   };
 
   useEffect(() => {
@@ -33,16 +33,16 @@ export default function Home() {
     <View style={styles.container}>
       <Text style={styles.title}>BrewLab</Text>
       <Text style={styles.subtitle}>Fresh coffee, fast delivery</Text>
-      <Pressable
-        style={({ pressed }) => [
-          styles.addBtn,
-          pressed && { opacity: 0.6, transform: [{ scale: 0.97 }] },
-        ]}
-        hitSlop={20}
+      <Btn
         onPress={() => router.push("/AddOrder")}
-      >
-        <Text style={styles.addBtnText}>+</Text>
-      </Pressable>
+        text={"+"}
+        style={{ backgroundColor: "#418652ff", right: 23 }}
+      />
+      <Btn
+        onPress={() => router.push("/Rw")}
+        text={"#"}
+        style={{ backgroundColor: "#416786ff", left: 23 }}
+      />
 
       <View style={styles.statsContainer}>
         {stats.map((stat) => (
@@ -95,22 +95,5 @@ const styles = StyleSheet.create({
     marginTop: 40,
     flexDirection: "row",
     justifyContent: "space-around",
-  },
-  addBtn: {
-    aspectRatio: 1 / 1,
-    width: 65,
-    position: "absolute",
-    bottom: 24,
-    zIndex: 999,
-    right: 23,
-    backgroundColor: "forestgreen",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 15,
-  },
-  addBtnText: {
-    alignSelf: "center",
-    fontSize: 28,
-    color: "white",
   },
 });

@@ -1,19 +1,34 @@
 import { Pressable, Text, StyleSheet } from "react-native";
+import Animated, {
+  useSharedValue,
+  withTiming,
+  useAnimatedStyle,
+} from "react-native-reanimated";
 
 export default function OrderItem({ order, onPress }) {
+  const scale = useSharedValue(1);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
   return (
-    <Pressable
-      style={({ pressed }) => [
-        styles.item,
-        pressed && { opacity: 0.6, transform: [{ scale: 0.97 }] },
-      ]}
-      onPress={onPress}
-      hitSlop={20}
-    >
-      <Text style={styles.id}>#{order.id}</Text>
-      <Text style={styles.customer}>{order.customer}</Text>
-      <Text style={styles.total}>${order.total.toFixed(2)}</Text>
-    </Pressable>
+    <Animated.View style={[styles.item, animatedStyle]}>
+      <Pressable
+      onPressIn={() => {
+        scale.value = withTiming(0.96, {duration: 80})
+      }}
+      onPressOut={() => {
+        scale.value = withTiming(1, {duration: 80})
+      }}
+        // onPress={onPress}
+        hitSlop={20}
+      >
+        <Text style={styles.id}>#{order.id}</Text>
+        <Text style={styles.customer}>{order.customer}</Text>
+        <Text style={styles.total}>${order.total.toFixed(2)}</Text>
+      </Pressable>
+    </Animated.View>
   );
 }
 
