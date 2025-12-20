@@ -1,10 +1,48 @@
-import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Alert,
+  FlatList,
+} from "react-native";
 
 export default function App() {
   const pressed = (type) => {
     console.log(`Clicked: ${type}!`);
     Alert.alert("You clicked", `You clicked '${type}'`);
   };
+
+  const orderPressed = (item) => {
+    Alert.alert(`Order #${item.id}`, `${item.customer} - $${item.total.toFixed(2)}`);
+  };
+
+  const orders = [
+    { id: "1", customer: "John Doe", total: 12.5 },
+    { id: "2", customer: "Jane Smith", total: 9.0 },
+    { id: "3", customer: "Alice Johnson", total: 14.75 },
+    { id: "4", customer: "Bob Brown", total: 8.5 },
+    { id: "5", customer: "Devloper Musa", total: 10.543 },
+    { id: "6", customer: "Dr. Hira", total: 10.543 },
+    { id: "7", customer: "Esa Jr", total: 85 },
+    { id: "8", customer: "Maimoona", total: 5 },
+    { id: "9", customer: "Nodi", total: 0.5 },
+    { id: "10", customer: "Haseen", total: 4.5 },
+  ];
+
+  const renderOrder = ({ item }) => (
+    <Pressable
+      style={({ pressed }) => [
+        styles.orderItem,
+        pressed && { opacity: 0.6, transform: [{ scale: 0.97 }] },
+      ]}
+      onPress={() => orderPressed(item)}
+    >
+      <Text style={styles.orderNo}>#{item.id}</Text>
+      <Text style={styles.orderText}>{item.customer}</Text>
+      <Text style={styles.orderTotal}>${item.total.toFixed(2)}</Text>
+    </Pressable>
+  );
 
   return (
     <View style={styles.container}>
@@ -35,6 +73,14 @@ export default function App() {
           <Text style={styles.cardText}>Revenue</Text>
         </Pressable>
       </View>
+
+      <FlatList
+        data={orders}
+        renderItem={renderOrder}
+        style={styles.ordersList}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingBottom: 30 }}
+      />
     </View>
   );
 }
@@ -77,5 +123,34 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     textAlign: "center",
+  },
+  ordersList: {
+    borderWidth: 1,
+    width: "100%",
+    marginTop: 30,
+  },
+  orderItem: {
+    width: "90%",
+    backgroundColor: "rgba(56, 56, 56, 0.77)",
+    marginBottom: 12,
+    margin: "auto",
+    paddingVertical: 13,
+    paddingHorizontal: 23,
+    borderRadius: 15,
+  },
+  orderNo: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  orderText: {
+    color: "#cbd5e1",
+    fontSize: 16,
+    marginTop: 4,
+  },
+  orderTotal: {
+    marginTop: 2,
+    color: "white",
+    fontSize: 16,
   },
 });
